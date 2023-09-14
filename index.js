@@ -1,6 +1,7 @@
 const express = require('express');
 const httpProxy = require('http-proxy');
 const http = require('http');
+const cors = require('cors');
 
 function responseHandler(res) {
   return (resp) => {
@@ -26,6 +27,14 @@ function responseHandler(res) {
 
 const app = express();
 app.use(express.json());
+app.use(
+  cors({
+    origin: 'https://mon-test.netlify.app/',
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'cookie'],
+  })
+);
+
 app.use('/proxy', async (req, res) => {
   await http.get(
     'http://93.153.199.250:8080/mlat/status',
